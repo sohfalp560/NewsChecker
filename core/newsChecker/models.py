@@ -56,8 +56,9 @@ class NewStory(models.Model):
 @receiver(post_save, sender=NewsProvider)
 def create_stories_from_website(sender, instance, created, **kwargs):
     if created:
-        transaction.on_commit(lambda: scrap_save(instance.pk))
+        transaction.on_commit(lambda: scrap_news_website(instance.pk))
 
+"""because it is moved to task.py:
 def scrap_save(instance_pk):
     print("the signal start")
     try:
@@ -90,3 +91,4 @@ def scrap_save(instance_pk):
 
         instance.status = NewsProvider.STATUS.failed
         instance.save(update_fields=['status'])
+"""
